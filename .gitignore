@@ -1,0 +1,5 @@
+.vs/
+OnlineStore.Infrastructure/bin/
+OnlineStore.Infrastructure/obj/
+OnlineStore.ApplicationCore/bin/
+OnlineStore.ApplicationCore/obj/
