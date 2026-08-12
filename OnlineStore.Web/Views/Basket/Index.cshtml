@@ -1,80 +1,320 @@
 ﻿@using OnlineStore.Web.ViewModels
+@model BasketViewModel
+
 @{
-    ViewData["Title"] = "Basket";
-    @model BasketViewModel
+    ViewData["Title"] = "Shopping Basket";
+
+    var totalQuantity = Model.Items.Sum(item => item.Quantity);
 }
-<section class="esh-catalog-hero">
+
+
+<section class="basket-page">
+
     <div class="container">
-        <img class="esh-catalog-title" src="../images/main_banner_text.png" />
-    </div>
-</section>
 
-<div class="container">
+        <!-- =========================
+             PAGE HEADER
+        ========================== -->
 
-    @if (Model.Items.Any())
-    {
-        <form method="post">
-            <article class="esh-basket-titles row">
-                <br />
-                <section class="esh-basket-title col-3">Product</section>
-                <section class="esh-basket-title col-3 hidden-lg-down"></section>
-                <section class="esh-basket-title col-2">Price</section>
-                <section class="esh-basket-title col-2">Quantity</section>
-                <section class="esh-basket-title col-2">Cost</section>
-            </article>
-            <div class="esh-catalog-items row">
-                @foreach (var item in Model.Items)
-                {
-                    <article class="esh-basket-items  row">
-                        <section class="esh-basket-item esh-basket-item--middle col-lg-3 d-none d-xl-block">
-                                <img class="esh-basket-image" src="@item.PictureUrl" />
-                            </section>
-                            <section class="esh-basket-item esh-basket-item--middle col-3">@item.ProductName</section>
-                            <section class="esh-basket-item esh-basket-item--middle col-2">$ @item.UnitPrice.ToString("N2")</section>
-                            <section class="esh-basket-item esh-basket-item--middle col-2">
-                                <input type="hidden" name="@("quantities[" + item.Id + "].Key")" value="@item.Id" />
-                                <input type="number" class="esh-basket-input" min="1" name="@("quantities[" + item.Id + "].Value")" value="@item.Quantity" />
-                            </section>
-                            <section class="esh-basket-item esh-basket-item--middle esh-basket-item--mark col-2">$ @Math.Round(item.Quantity * item.UnitPrice, 2).ToString("N2")</section>
-                        <div class="row">
-                        </div>
-                    </article>
-                    @*<div class="esh-catalog-item col-md-4">
-                            @item.ProductId
-                        </div>*@
+        <div class="basket-page-header">
 
-                    <div class="container">
-                        <article class="esh-basket-titles esh-basket-titles--clean row">
-                            <section class="esh-basket-title col-10"></section>
-                            <section class="esh-basket-title col-2">Total</section>
-                        </article>
+            <div>
 
-                        <article class="esh-basket-items row">
-                            <section class="esh-basket-item col-10"></section>
-                            <section class="esh-basket-item esh-basket-item--mark col-2">$ @Model.Total()</section>
-                        </article>
+                <span class="basket-eyebrow">
+                    YOUR CART
+                </span>
 
-                        <article class="esh-basket-items row">
-                            <section class="esh-basket-item col-7"></section>
-                            <section class="esh-basket-item col-2">
-                                @*<button class="btn esh-basket-checkout" name="name" value="" type="submit">[ Update ]</button>*@
-                            </section>
-                        </article>
-                    </div>
-                }
-                <section class="esh-basket-item offset-9 col-3">
-                    <input type="submit" asp-action="Checkout"
-                           class="btn esh-basket-checkout"
-                           value="[ Checkout ]" name="action" />
-                </section>
+                <h1>
+                    Shopping Basket
+                </h1>
+
+                <p>
+                    Review your items before continuing to checkout.
+                </p>
 
             </div>
-        </form>
-    }
-    else
-    {
-        <div class="esh-catalog-items row">
-            Basket is empty.
+
+
+            <a asp-controller="Catalog"
+               asp-action="Index"
+               class="basket-continue-link">
+
+                ← Continue Shopping
+
+            </a>
+
         </div>
-    }
-</div>
+
+
+        @if (Model.Items.Any())
+        {
+
+            <div class="basket-layout">
+
+
+                <!-- =========================
+                     CART ITEMS
+                ========================== -->
+
+                <div class="basket-items-panel">
+
+
+                    <div class="basket-items-header">
+
+                        <span>
+                            @totalQuantity
+                            @(totalQuantity == 1 ? "item" : "items")
+                        </span>
+
+                    </div>
+
+
+                    @foreach (var item in Model.Items)
+                    {
+
+                        <article class="basket-item-card">
+
+
+                            <!-- Product image -->
+
+                            <div class="basket-item-image-wrapper">
+
+                                <img src="@item.PictureUrl"
+                                     alt="@item.ProductName"
+                                     class="basket-item-image" />
+
+                            </div>
+
+
+                            <!-- Product details -->
+
+                            <div class="basket-item-details">
+
+                                <span class="basket-item-label">
+                                    PRODUCT
+                                </span>
+
+                                <h2>
+                                    @item.ProductName
+                                </h2>
+
+
+                                <div class="basket-item-meta">
+
+                                    <div>
+
+                                        <span>
+                                            Unit price
+                                        </span>
+
+                                        <strong>
+                                            $@item.UnitPrice.ToString("N2")
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Quantity
+                                        </span>
+
+                                        <strong class="basket-quantity-badge">
+                                            @item.Quantity
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Item total -->
+
+                            <div class="basket-item-total">
+
+                                <span>
+                                    Item total
+                                </span>
+
+                                <strong>
+                                    $@Math.Round(
+                                                                            item.Quantity * item.UnitPrice,
+                                                                            2
+                                                                        ).ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                        </article>
+
+                    }
+
+
+                </div>
+
+
+
+                <!-- =========================
+                     ORDER SUMMARY
+                ========================== -->
+
+                <aside class="basket-summary">
+
+
+                    <span class="basket-summary-label">
+                        ORDER SUMMARY
+                    </span>
+
+
+                    <h2>
+                        Your order
+                    </h2>
+
+
+                    <div class="basket-summary-divider"></div>
+
+
+                    <div class="basket-summary-row">
+
+                        <span>
+                            Items
+                        </span>
+
+                        <strong>
+                            @totalQuantity
+                        </strong>
+
+                    </div>
+
+
+                    <div class="basket-summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            $@Model.Total().ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="basket-summary-divider"></div>
+
+
+                    <div class="basket-summary-total">
+
+                        <div>
+
+                            <span>
+                                Total
+                            </span>
+
+                            <small>
+                                Before any additional charges
+                            </small>
+
+                        </div>
+
+
+                        <strong>
+                            $@Model.Total().ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <form asp-controller="Basket"
+                          asp-action="Checkout"
+                          method="post">
+
+                        <button type="submit"
+                                class="basket-checkout-button">
+
+                            Proceed to Checkout
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+                    </form>
+
+
+                    <a asp-controller="Catalog"
+                       asp-action="Index"
+                       class="basket-secondary-action">
+
+                        Continue Shopping
+
+                    </a>
+
+
+                    <div class="basket-safe-note">
+
+                        <span class="basket-safe-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Your basket is associated with your current shopping session.
+                        </span>
+
+                    </div>
+
+
+                </aside>
+
+
+            </div>
+
+        }
+
+        else
+        {
+
+            <!-- =========================
+                 EMPTY BASKET
+            ========================== -->
+
+            <div class="basket-empty">
+
+                <div class="basket-empty-icon">
+                    🛒
+                </div>
+
+                <span class="basket-eyebrow">
+                    YOUR CART
+                </span>
+
+                <h2>
+                    Your basket is empty
+                </h2>
+
+                <p>
+                    You haven't added any products yet.
+                    Browse the collection and find something you like.
+                </p>
+
+                <a asp-controller="Catalog"
+                   asp-action="Index"
+                   class="store-primary-button">
+
+                    Explore Products
+
+                </a>
+
+            </div>
+
+        }
+
+
+    </div>
+
+</section>

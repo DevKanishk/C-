@@ -1,18 +1,14 @@
-﻿using OnlineStore.ApplicationCore.Entities;
-using OnlineStore.ApplicationCore.Entities.OrderAggregate;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OnlineStore.ApplicationCore.Entities.OrderAggregate;
 
 namespace OnlineStore.Infrastructure.Data
 {
-    public class OrderDbContext: DbContext
+    public class OrderDbContext : DbContext
     {
-        public OrderDbContext(DbContextOptions options) : base(options)
+        public OrderDbContext(
+            DbContextOptions<OrderDbContext> options
+        ) : base(options)
         {
         }
 
@@ -26,15 +22,18 @@ namespace OnlineStore.Infrastructure.Data
             builder.Entity<OrderItem>(ConfigureOrderItem);
         }
 
-        private void ConfigureOrder(EntityTypeBuilder<Order> builder)
+        private void ConfigureOrder(
+            EntityTypeBuilder<Order> builder
+        )
         {
             builder.OwnsOne(o => o.ShipToAddress);
         }
 
-        private void ConfigureOrderItem(EntityTypeBuilder<OrderItem> builder)
+        private void ConfigureOrderItem(
+            EntityTypeBuilder<OrderItem> builder
+        )
         {
             builder.OwnsOne(i => i.ItemOrdered);
         }
-
     }
 }

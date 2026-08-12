@@ -1,18 +1,13 @@
-﻿using OnlineStore.ApplicationCore.Entities;
-using OnlineStore.ApplicationCore.Entities.OrderAggregate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineStore.ApplicationCore.Entities;
 
 namespace OnlineStore.Infrastructure.Data
 {
-    public class BasketDbContext: DbContext
+    public class BasketDbContext : DbContext
     {
-        public BasketDbContext(DbContextOptions options) : base(options)
+        public BasketDbContext(
+            DbContextOptions<BasketDbContext> options
+        ) : base(options)
         {
         }
 

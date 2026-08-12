@@ -1,80 +1,163 @@
 ﻿<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            @ViewData["Title"] - OnlineStore 
-        </title>
 
-        <environment names="Development">
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/css/catalog/catalog.component.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/css/catalog/pager.css" asp-append-version="true" />
-        </environment>
-        <environment names="Staging, Production">
-            <link rel="stylesheet" href="https://cdn.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/css/catalog/catalog.component.min.css" asp-append-version="true" />
-            <link rel="stylesheet" href="~/css/catalog/pager.min.css" asp-append-version="true" />
-        </environment>
-    </head>
-    <body>
-        <header class="navbar navbar-light navbar-static-top">
-            <div class="container">
-                <article class="row">
-                    <section class="col-lg-7 col-md-6 col-xl-12">
-                        <a asp-area="" asp-controller="Catalog" asp-action="Index">
-                            <img src="~/images//brand.png" />
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - OnlineStore</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER / NAVBAR
+    ========================================== -->
+    <header class="store-header">
+
+        <div class="container">
+
+            <div class="store-navbar">
+
+                <!-- Brand -->
+                <a asp-controller="Catalog"
+                   asp-action="Index"
+                   class="store-brand">
+
+                    <span class="store-brand-icon">
+                        OS
+                    </span>
+
+                    <span class="store-brand-text">
+                        <strong>OnlineStore</strong>
+                        <small>Modern Commerce</small>
+                    </span>
+
+                </a>
+
+
+                <!-- Navigation -->
+                <nav class="store-nav">
+
+                    <a asp-controller="Catalog"
+                       asp-action="Index">
+                        Shop
+                    </a>
+
+
+                    @if (Context.User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-controller="Order"
+                           asp-action="Index">
+                            My Orders
                         </a>
-                    </section>
-                    @await Html.PartialAsync("_LoginPartial")
-                <section class="col-lg-7 col-md-6 col-xl-12">
-                    <a asp-area="" asp-controller="Basket" asp-action="Index">
+                    }
+
+
+                    <a asp-controller="Basket"
+                       asp-action="Index"
+                       class="store-cart-link">
                         Basket
                     </a>
-                </section>
-                </article>
-            </div>
-        </header>
-        @RenderBody()
-        <footer class="esh-app-footer">
-            <div class="container">
-                <article class="row">
-                    <section class="col-sm-6">
-                        <img class="esh-app-footer-brand" src="~/images/brand_dark.png" />
-                    </section>
-                    <section class="col-sm-6">
-                        <div class="esh-app-footer-text hidden-xs">
-                            OnlineStore - All Right Reserved
-                        </div>
-                    </section>
-                </article>
-            </div>
-        </footer>
 
-        <environment names="Development">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-        </environment>
-        <environment names="Staging, Production">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min..js"
-            asp-fallback-src="~/lib/jquery/dist/jquery.js"
-            asp-fallback-test="window.jQuery"
-            >
-            </script>
-        <script src="https://cdnforbootstrp"
-                asp-fallback-src="~/lib/bootstarp/dist/js/bootstrap.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>
-        @RenderSection("Scripts", required: false)
-    </body>
+
+                    @if (Context.User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-controller="Account"
+                              asp-action="SignOut"
+                              method="post">
+
+                            <button type="submit"
+                                    class="store-login-button">
+                                Logout
+                            </button>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account"
+                           asp-action="SignIn"
+                           class="store-login-button">
+                            Login
+                        </a>
+                    }
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         CURRENT PAGE CONTENT
+    ========================================== -->
+    <main role="main">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+    <footer class="store-footer">
+
+        <div class="container">
+
+            <div class="store-footer-content">
+
+                <div class="store-footer-brand">
+
+                    <span class="store-brand-icon">
+                        OS
+                    </span>
+
+                    <div>
+                        <strong>OnlineStore</strong>
+                        <p>Modern Commerce</p>
+                    </div>
+
+                </div>
+
+
+                <p class="store-footer-copy">
+                    © @DateTime.Now.Year OnlineStore.
+                    All Rights Reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
 </html>

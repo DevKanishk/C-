@@ -1,4 +1,5 @@
 using OnlineStore.ApplicationCore;
+using OnlineStore.ApplicationCore.Entities;
 using OnlineStore.ApplicationCore.Interface;
 using OnlineStore.ApplicationCore.Services;
 using OnlineStore.Infrastructure.Data;
@@ -17,7 +18,7 @@ namespace OnlineStore.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-           
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddSession(options =>
@@ -67,8 +68,15 @@ namespace OnlineStore.Web
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Default generic repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
             builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(EFRepository<>));
+
+            // IMPORTANT:
+            // Basket must use BasketRepository -> BasketDbContext,
+            // NOT the generic EFRepository<> (which resolves to CatalogDbContext)
+            builder.Services.AddScoped<IRepository<Basket>, BasketRepository>();
+            builder.Services.AddScoped<IAsyncRepository<Basket>, BasketRepository>();
 
             var app = builder.Build();
 

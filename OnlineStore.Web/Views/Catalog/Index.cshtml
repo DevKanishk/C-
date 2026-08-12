@@ -1,60 +1,259 @@
 ﻿@using OnlineStore.Web.ViewModels
+@model CatalogIndex
+
 @{
-	ViewData["Title"] = "Catalog";
-	@model CatalogIndex;
+    ViewData["Title"] = "Shop";
 }
 
-<section class="esh-catalog-hero">
-	<div class="container">
-		<img class="esh-catalog-title" src="../images/main_banner_text.png" />
-	</div>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="store-hero">
+
+    <div class="container">
+
+        <div class="store-hero-content">
+
+            <div class="store-hero-copy">
+
+                <span class="store-hero-badge">
+                    NEW COLLECTION
+                </span>
+
+                <h1>
+                    Discover products
+                    <span>you'll love.</span>
+                </h1>
+
+                <p>
+                    Browse our collection of apparel,
+                    accessories and everyday essentials.
+                    Simple shopping, secure checkout,
+                    and a seamless experience.
+                </p>
+
+                <div class="store-hero-actions">
+
+                    <a href="#products"
+                       class="store-primary-button">
+
+                        Shop Collection
+
+                    </a>
+
+                    <a asp-controller="Basket"
+                       asp-action="Index"
+                       class="store-secondary-button">
+
+                        View Basket
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="store-hero-visual">
+
+                <div class="store-hero-card">
+
+                    <span>
+                        ASP.NET CORE
+                    </span>
+
+                    <h3>
+                        Full-stack
+                        e-commerce
+                    </h3>
+
+                    <p>
+                        MVC · EF Core · Identity
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
-<section class="esh-catalog-filters">
-	<div class="container">
-		<form asp-controller="Catalog" asp-action="Index" method="post" >
-			<label class="esh-catalog-label" data-title="brand">
-				<select asp-for="@Model.BrandFilterApplied" asp-items="@Model.Brands" class="esh-catalog-filter">
-				</select>
-			</label>
 
-			<label class="esh-catalog-label" data-title="type">
-				<select asp-for="@Model.TypesFilterApplied" asp-items="@Model.Types" class="esh-catalog-filter">
-				</select>
-			</label>
+<!-- =====================================================
+     PRODUCT CATALOG
+===================================================== -->
 
-			<input class="esh-catalog-send" type="image" src="../images/arrow-right.svg" />
+<section id="products"
+         class="store-catalog">
 
-		</form> 
-	</div>
+    <div class="container">
+
+
+        <!-- Section heading -->
+
+        <div class="store-section-heading">
+
+            <div>
+
+                <span class="store-section-label">
+                    OUR STORE
+                </span>
+
+                <h2>
+                    Shop our collection
+                </h2>
+
+                <p>
+                    Explore products and find something
+                    that fits your style.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FILTERS
+        ================================================== -->
+
+        <form asp-controller="Catalog"
+              asp-action="Index"
+              method="get"
+              class="store-filter-panel">
+
+
+            <div class="store-filter-field">
+
+                <label asp-for="BrandFilterApplied">
+                    Brand
+                </label>
+
+                <select asp-for="BrandFilterApplied"
+                        asp-items="Model.Brands">
+                </select>
+
+            </div>
+
+
+            <div class="store-filter-field">
+
+                <label asp-for="TypesFilterApplied">
+                    Product Type
+                </label>
+
+                <select asp-for="TypesFilterApplied"
+                        asp-items="Model.Types">
+                </select>
+
+            </div>
+
+
+            <button type="submit"
+                    class="store-filter-button">
+
+                Apply Filters
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+        @if (Model.CatalogItems.Any())
+        {
+
+            <div class="store-results-info">
+
+                <div>
+
+                    <strong>
+                        @Model.PaginationInfo.TotalItems
+                    </strong>
+
+                    products found
+
+                </div>
+
+
+                <div class="store-results-page">
+
+                    Page
+                    @(Model.PaginationInfo.ActualPage + 1)
+
+                    of
+
+                    @Model.PaginationInfo.TotalPages
+
+                </div>
+
+            </div>
+
+
+            <div class="store-products-grid">
+
+                @foreach (var catalogItem in Model.CatalogItems)
+                {
+
+                    @await Html.PartialAsync(
+                        "_product",
+                        catalogItem
+                    )
+
+                }
+
+            </div>
+
+
+            @await Html.PartialAsync(
+                "_pagination",
+                Model
+            )
+
+        }
+
+        else
+        {
+
+            <div class="store-empty-state">
+
+                <div class="store-empty-icon">
+                    !
+                </div>
+
+                <h3>
+                    No products found
+                </h3>
+
+                <p>
+                    Try changing your brand or
+                    product type filters.
+                </p>
+
+                <a asp-controller="Catalog"
+                   asp-action="Index"
+                   class="store-primary-button">
+
+                    View All Products
+
+                </a>
+
+            </div>
+
+        }
+
+
+    </div>
+
 </section>
-
-<div class="container">
-	@if (Model.CatalogItems.Any())
-	{
-		@Html.Partial("_pagination", Model.PaginationInfo)
-		<div class="esh-catalog-items row">
-			@foreach (var catalogItem in Model.CatalogItems)
-			{
-				<div class="esh-catalog-item col-md-4">
-					@Html.Partial("_product",catalogItem)
-				</div>				
-			}
-		</div>
-		@Html.Partial("_pagination", Model.PaginationInfo)
-	}
-	else
-	{
-		<div class="esh-catalog-items row">
-			There are not results that match you search
-		</div>	
-	}
-
-</div>
-
-
-
-
-
-
-

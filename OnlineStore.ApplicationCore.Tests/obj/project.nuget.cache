@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kSWx9LC70G4=",
+  "dgSpecHash": "AZx9UjypEAc=",
   "success": true,
-  "projectFilePath": "D:\\OnlineStore_No_eShopCKC\\OnlineStore\\OnlineStore.ApplicationCore.Tests\\OnlineStore.ApplicationCore.Tests.csproj",
+  "projectFilePath": "D:\\php\\C--repo\\OnlineStore.ApplicationCore.Tests\\OnlineStore.ApplicationCore.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\soft\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
     "C:\\Users\\soft\\.nuget\\packages\\microsoft.codecoverage\\17.14.1\\microsoft.codecoverage.17.14.1.nupkg.sha512",
